@@ -1467,7 +1467,10 @@ class GaussianDiffusion:
         """
         assert 'input_ids' in model_kwargs
         input_ids = model_kwargs.pop('input_ids').to(t.device)
-        x_start_mean = model.model.module.get_embeds(input_ids)
+        
+        actual_model = model.model.module if hasattr(model.model, 'module') else model.model
+        x_start_mean = actual_model.get_embeds(input_ids)
+        
         if self.model_arch == 'conv-unet':
             seqlen = int(np.sqrt(input_ids.size(1)))
             x_start_mean = x_start_mean.view(x_start_mean.size(0), seqlen, seqlen, x_start_mean.size(-1)).permute(0, 3,
@@ -1484,7 +1487,9 @@ class GaussianDiffusion:
         if noise is None:
             noise = th.randn_like(x_start)
         x_t = self.q_sample(x_start, t, noise=noise) # reparametrization trick.
-        get_logits = model.model.module.get_logits
+        
+        actual_model = model.model.module if hasattr(model.model, 'module') else model.model
+        get_logits = actual_model.get_logits
 
         terms = {}
 
