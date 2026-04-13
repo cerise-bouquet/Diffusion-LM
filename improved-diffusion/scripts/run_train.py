@@ -23,7 +23,7 @@ if __name__ == '__main__':
     parser.add_argument('--num_res_blocks', type=int, default=2, help='')
 
     parser.add_argument('--lr', type=float, default=1e-04, help='')
-    parser.add_argument('--bsz', type=int, default=64, help='')
+    parser.add_argument('--bsz', type=int, default=8, help='')
     parser.add_argument('--diff_steps', type=int, default=4000, help='')
     parser.add_argument('--padding_mode', type=str, default='block', help='')
     parser.add_argument('--seed', type=int, default=101, help='') # old is 42
