@@ -133,7 +133,11 @@ def main():
                                         args.checkpoint_path, extra_args=args)
         model3 = get_weights(model2, args)
         print(model3, model3.weight.requires_grad)
-        mapping_func = partial(compute_logp, args, model3.cuda())
+        
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        model3 = model3.to(device)
+        mapping_func = partial(compute_logp, args, model3)
+        
         diffusion.mapping_func = mapping_func
         return mapping_func
 
